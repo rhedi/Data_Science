@@ -1,0 +1,39 @@
+#:oad Library stringdist
+library(stringdist)
+
+#Membuat variable vector nama
+nama.pelanggan <- c("Agus Cahyono", "Justin Biever", "Agus Tjahyono", "Cahyono Agus")
+
+#Inisialiasi variable untuk hasil. akhir
+hasil.akhir <- NULL
+
+#Inisialiasi variable grouping_no dengan nilai 1
+grouping_no <- 1
+
+#Melakukan perulangan proses pencarian dengan perintah while, sampai akhir isi vector menjadi kosong (panjang = 0)
+while(length(nama.pelanggan)>0)
+{
+  #Variable referensi diisi dengan item pertama variabel nama.pelanggan
+  referensi <- nama.pelanggan[1]
+  
+  #Menghitung jarak antara referensi dengan item-item nama.pelanggan
+  jarak.teks <- stringdist(referensi, nama.pelanggan, method = "cosine")
+  
+  #Hasil filter dengan threshold 0.15 disimpan ke variable nama.hasil
+  nama.hasil <- nama.pelanggan[jarak.teks <= 0.15]
+  
+  #Hasil filter jarak dengan threshold 0.15 disimpan ke variable nama.hasil
+  var.temp = data.frame(grouping=grouping_no, nama=nama.hasil)
+  
+  #MEnggabungkan hasil sebelumnya 
+  hasil.akhir <- rbind(hasil.akhir, var.temp)
+  
+  #Mengambil porsi data yang bukan di dalam threshold dengan menggunakan simbol ! yang mewakili operator not (bukan)
+  nama.pelanggan <- nama.pelanggan[!(jarak.teks <=0.15)]
+  
+  #Menambahkan nilai grouping untuk diambil pada iterasi selanjutnya 
+  grouping_no <- grouping_no + 1
+}
+
+#Menampilkan hasil
+hasil.akhir
